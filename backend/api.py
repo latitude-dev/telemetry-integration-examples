@@ -22,6 +22,7 @@ async def _stream_as_sse(chunk_stream: AsyncIterator[str]) -> AsyncIterator[str]
         sse_payload = "\n".join(f"data: {line}" for line in lines) + "\n\n"
         yield sse_payload
 
+
 app = FastAPI()
 
 app.add_middleware(
