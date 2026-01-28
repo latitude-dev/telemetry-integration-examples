@@ -1,7 +1,7 @@
 # This is the prompt added in Latitude that creates the wikipedia article, very simple.
 
 ---
-provider: OpenAI
+provider: OpenAI # Add your own provider and models here
 model: gpt-4.1
 ---
 
