@@ -1,7 +1,7 @@
 [project]
-name = "python-sdk-example"
+name = "python-sdk-example-backend"
 version = "0.1.0"
-description = "Example of how to use Latitude in Python"
+description = "Backend API for Wikipedia article generation"
 authors = [
     { name = "Latitude", email = "manu@latitude.so" }
 ]

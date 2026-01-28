@@ -1132,7 +1132,7 @@ wheels = [
 ]
 
 [[package]]
-name = "python-sdk-example"
+name = "python-sdk-example-backend"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

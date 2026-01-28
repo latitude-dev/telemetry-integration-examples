@@ -1,0 +1,39 @@
+/* Tailwind + shadcn: directives, theme variables, and base styles live here */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 50% 12%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 220 50% 12%;
+    --secondary: 220 30% 22%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 30% 22%;
+    --muted-foreground: 220 15% 70%;
+    --accent: 220 30% 22%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 25% 28%;
+    --input: 220 25% 28%;
+    --ring: 220 15% 70%;
+    --radius: 0.625rem;
+  }
+  body {
+    @apply bg-background text-foreground antialiased min-h-screen;
+  }
+  #root {
+    @apply min-h-screen;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}

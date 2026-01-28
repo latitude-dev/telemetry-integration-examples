@@ -1,4 +1,5 @@
 import os
+from collections.abc import AsyncIterator
 from openai import OpenAI
 from latitude_sdk import Latitude, LatitudeOptions, RenderPromptOptions
 from promptl_ai import Adapter
@@ -26,7 +27,7 @@ prompt_path_str = os.getenv("LATITUDE_PROMPT_PATH")
 
 
 @telemetry.capture(project_id=project_id_str, path=prompt_path_str)
-async def generate_wikipedia_article(input: str) -> str:
+async def generate_wikipedia_article_stream(input: str) -> AsyncIterator[str]:
     prompt = await latitude.prompts.get(prompt_path_str)
     rendered_prompt = await latitude.prompts.render(
         prompt.content,
@@ -37,12 +38,15 @@ async def generate_wikipedia_article(input: str) -> str:
             adapter=Adapter.OpenAI,
         ),
     )
-    print(rendered_prompt.config)
     client = OpenAI()
 
-    # You can also hard code the model here if you dont want to use the same model as the one in the prompt of Latitude
-    completion = client.chat.completions.create(
+    stream = client.chat.completions.create(
         model=rendered_prompt.config["model"],
         messages=rendered_prompt.messages,
+        stream=True,
     )
-    return completion.choices[0].message.content
+    for chunk in stream:
+        if chunk.choices[0].delta.content is not None:
+            content = chunk.choices[0].delta.content
+            print(content, end="", flush=True)
+            yield content
