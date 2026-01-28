@@ -10,6 +10,15 @@ const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 type View = "input" | "article";
 
+/** Parse SSE event payload from a single event block (lines ending with \\n\\n). */
+function parseSSEEvent(eventBlock: string): string {
+  return eventBlock
+    .split("\n")
+    .filter((line) => line.startsWith("data: "))
+    .map((line) => line.slice(6))
+    .join("\n");
+}
+
 function App() {
   const [view, setView] = useState<View>("input");
   const [concept, setConcept] = useState("");
@@ -34,11 +43,27 @@ function App() {
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No response body");
       const decoder = new TextDecoder();
+      const isSSE = res.headers.get("content-type")?.includes("text/event-stream");
+      let buffer = "";
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
-        setArticleContent((prev: string) => prev + chunk);
+        if (isSSE) {
+          buffer += chunk;
+          const events = buffer.split("\n\n");
+          buffer = events.pop() ?? "";
+          for (const event of events) {
+            const payload = parseSSEEvent(event);
+            if (payload) setArticleContent((prev: string) => prev + payload);
+          }
+        } else {
+          setArticleContent((prev: string) => prev + chunk);
+        }
+      }
+      if (isSSE && buffer.trim()) {
+        const payload = parseSSEEvent(buffer);
+        if (payload) setArticleContent((prev: string) => prev + payload);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to generate article");
