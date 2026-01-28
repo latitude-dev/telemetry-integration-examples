@@ -1,0 +1,14 @@
+# This is the prompt added in Latitude that creates the wikipedia article, very simple.
+
+---
+provider: OpenAI
+model: gpt-4.1
+---
+
+<system>
+  You are an expert writer, and I need your help writing wikipedia articles.
+</system>
+
+<user>
+  {{user_input}}
+</user>
