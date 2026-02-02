@@ -35,11 +35,11 @@ From the repo root:
 
 ```bash
 cd backend
-uv uv sync --all-extras --all-groups
+uv sync --all-extras --all-groups
 uv run uvicorn api:app --reload
 ```
 
-API runs at **http://localhost:8000**.  
+API runs at **http://localhost:8000**.
 Stream endpoint: `POST /generate-wikipedia-article` with JSON body `{"input": "Concept name"}`.
 
 ### 3. Frontend
