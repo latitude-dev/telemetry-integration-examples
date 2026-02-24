@@ -6,7 +6,9 @@
 
 ## What is this?
 
-A Python example for how to integrate Latitude to your webapp. This includes the two approaches we advise:
+A simple Python webapp to shwocase how to integrate Latitude in your app. This web application generates a wikipedia article based on a word/phrase you write in.
+
+In this repo, you will see the two ways of implementing Latitude Telemetry:
 
 1. **Using Latitude as the gateway:** Run your prompts through Latitude.
 
