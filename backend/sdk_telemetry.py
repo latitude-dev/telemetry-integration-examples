@@ -2,9 +2,13 @@ import os
 from collections.abc import AsyncIterator
 from openai import OpenAI
 from latitude_sdk import Latitude, LatitudeOptions, RenderPromptOptions
+from latitude_sdk.sdk.latitude import InternalOptions
+from latitude_sdk.sdk.types import GatewayOptions
 from promptl_ai import Adapter
 
 from latitude_telemetry import Telemetry, Instrumentors, TelemetryOptions
+from latitude_telemetry.telemetry.telemetry import InternalOptions as TelemetryInternalOptions
+from latitude_telemetry.telemetry.types import GatewayOptions as TelemetryGatewayOptions
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,12 +18,25 @@ latitude = Latitude(
     LatitudeOptions(
         project_id=int(os.getenv("LATITUDE_PROJECT_ID")),
         version_uuid=os.getenv("LATITUDE_PROMPT_VERSION_UUID"),
+        internal=InternalOptions(
+            gateway=GatewayOptions(
+                host="localhost",
+                port=8787,
+                ssl=False,
+                api_version="v3",
+            )
+        ),
     ),
 )
 
 telemetry = Telemetry(
-    os.getenv("LATITUDE_API_KEY"),
-    TelemetryOptions(instrumentors=[Instrumentors.OpenAI]),
+    api_key,
+    TelemetryOptions(
+        instrumentors=[Instrumentors.OpenAI],
+        internal=TelemetryInternalOptions(
+            gateway=TelemetryGatewayOptions(base_url="http://localhost:8787")
+        ),
+    ),
 )
 
 project_id_str = os.getenv("LATITUDE_PROJECT_ID")
@@ -44,9 +61,13 @@ async def generate_wikipedia_article_stream(input: str) -> AsyncIterator[str]:
         model=rendered_prompt.config["model"],
         messages=rendered_prompt.messages,
         stream=True,
+        stream_options={"include_usage": True}
     )
     for chunk in stream:
-        if chunk.choices[0].delta.content is not None:
-            content = chunk.choices[0].delta.content
+        if not chunk.choices:
+            continue
+        first_choice = chunk.choices[0]
+        if first_choice.delta and first_choice.delta.content is not None:
+            content = first_choice.delta.content
             print(content, end="", flush=True)
             yield content
