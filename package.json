@@ -5,6 +5,7 @@
   "scripts": {
     "dev:frontend": "pnpm --filter wikipedia-article-frontend dev",
     "dev:backend:python": "cd backend/python && uv run uvicorn api:app --reload --port 8000",
-    "dev:backend:typescript": "pnpm --filter typescript-backend dev"
+    "dev:backend:typescript": "pnpm --filter typescript-backend dev",
+    "dev:backend:php": "cd backend/php && php -S localhost:8000 -t public"
   }
 }

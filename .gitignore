@@ -221,5 +221,9 @@ backend/typescript/dist/
 backend/python/__pycache__/
 backend/python/.venv/
 
+# PHP backend
+backend/php/vendor/
+backend/php/composer.lock
+
 # pnpm store
 .pnpm-store/
