@@ -1,0 +1,10 @@
+{
+  "name": "latitude-sdk-example",
+  "private": true,
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev:frontend": "pnpm --filter wikipedia-article-frontend dev",
+    "dev:backend:python": "cd backend/python && uv run uvicorn api:app --reload --port 8000",
+    "dev:backend:typescript": "pnpm --filter typescript-backend dev"
+  }
+}

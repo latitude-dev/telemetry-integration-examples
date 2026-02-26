@@ -48,5 +48,4 @@ async def generate_wikipedia_article_stream(input: str) -> AsyncIterator[str]:
     for chunk in stream:
         if chunk.choices[0].delta.content is not None:
             content = chunk.choices[0].delta.content
-            print(content, end="", flush=True)
             yield content

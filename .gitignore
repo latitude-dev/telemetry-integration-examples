@@ -210,6 +210,16 @@ __marimo__/
 
 
 # Frontend
-frontend/node_modules/
 frontend/dist/
 frontend/.env
+
+# TypeScript backend
+backend/typescript/node_modules/
+backend/typescript/dist/
+
+# Python backend
+backend/python/__pycache__/
+backend/python/.venv/
+
+# pnpm store
+.pnpm-store/

@@ -6,21 +6,29 @@
 
 ## What is this?
 
-A simple Python webapp to shwocase how to integrate Latitude in your app. This web application generates a wikipedia article based on a word/phrase you write in.
+A webapp that generates Wikipedia-style articles from a concept you type in, showcasing how to integrate [Latitude](https://latitude.so) into your app. The repo ships **two backend implementations** — one in **Python** (FastAPI) and one in **TypeScript** (Express) — sharing a single React frontend.
 
-In this repo, you will see the two ways of implementing Latitude Telemetry:
+Both backends expose the same API, so you can pick whichever language you prefer. Each demonstrates two integration approaches:
 
 1. **Using Latitude as the gateway:** Run your prompts through Latitude.
+2. **Using your own provider:** Use Latitude as a prompt versioning tool to pull your prompts from, and then wrap your provider calls with Latitude's telemetry package to get traces into Latitude.
 
-2. **Using your own provider:** Use Latitude as a prompt versioning tool to pull your prompts from, and then wrap your provider calls with Latitude's telemetry package to get traces into Latitude
+## Project structure
+
+```
+├── frontend/               Shared React + Vite UI
+├── backend/
+│   ├── python/             FastAPI backend (uvicorn)
+│   └── typescript/         Express backend (tsx)
+├── .env                    Shared environment variables
+└── package.json            Root workspace with dev scripts
+```
 
 ## How to run it
 
-You need to run both the backend and the frontend, and set the required environment variables.
+### 1. Environment variables
 
-### 1. Environment variables (`.env`):
-
-Create a `backend/.env` file with:
+Create a `.env` file at the **repo root** with:
 
 ```bash
 LATITUDE_API_KEY=your-latitude-api-key
@@ -31,34 +39,44 @@ OPENAI_API_KEY=your-openai-api-key
 USE_LATITUDE_GATEWAY=false
 ```
 
-### 2. Backend
-
-From the repo root:
+### 2. Install dependencies
 
 ```bash
-cd backend
+# From the repo root — installs frontend + TypeScript backend
+pnpm install
+
+# Python backend
+cd backend/python
 uv sync --all-extras --all-groups
-uv run uvicorn api:app --reload
 ```
 
-API runs at **http://localhost:8000**.
+### 3. Run the frontend
+
+In one terminal:
+
+```bash
+pnpm dev:frontend
+```
+
+App runs at **http://localhost:5173**.
+
+### 4. Run a backend
+
+In another terminal, pick **one** of the two:
+
+**Python backend:**
+
+```bash
+pnpm dev:backend:python
+```
+
+**TypeScript backend:**
+
+```bash
+pnpm dev:backend:typescript
+```
+
+Both serve the API at **http://localhost:8000**.
 Stream endpoint: `POST /generate-wikipedia-article` with JSON body `{"input": "Concept name"}`.
 
-### 3. Frontend
-
-In another terminal:
-
-```bash
-cd frontend
-pnpm install
-pnpm run dev
-```
-
-App runs at **http://localhost:5173**. Open it in a browser, enter a concept, and click **Generate article**.
-
----
-
-## Project structure
-
-- **backend/** – FastAPI app, Latitude SDK, and streaming logic.
-- **frontend/** – React + Vite UI; input form and markdown article display.
+Open the frontend in a browser, enter a concept, and click **Generate article**.
