@@ -8,20 +8,17 @@
 
 A webapp that generates Wikipedia-style articles from a concept you type in, showcasing how to integrate [Latitude](https://latitude.so) into your app.
 
-The repo shows how to do it with:
+The repo ships three backend implementations that all expose the same API, so you can pick whichever language you prefer:
 
-- Python (backend/python using official SDK)
-- Typescript (backend/typescript using official SDK)
-- Other Languages (using example of PHP that doesnt have SDK)
+| Backend | Language | Latitude SDK | Gateway mode | Telemetry mode | How telemetry is sent |
+|---------|----------|:------------:|:------------:|:--------------:|----------------------|
+| `backend/python` | Python | Official | Yes | Yes | SDK telemetry wrapper |
+| `backend/typescript` | TypeScript | Official | Yes | Yes | SDK telemetry wrapper |
+| `backend/php` | PHP | None | No | Yes | Raw OpenTelemetry (OTLP) |
 
-All backends expose the same API, so you can pick whichever language you prefer.
+**Gateway mode** — Latitude acts as the LLM gateway: your app sends prompts to Latitude, which forwards them to the provider and returns the response.
 
-The Python and TypeScript backends demonstrate two integration approaches:
-
-1. **Using Latitude as the gateway:** Run your prompts through Latitude.
-2. **Using your own provider:** Use Latitude as a prompt versioning tool to pull your prompts from, and then wrap your provider calls with Latitude's telemetry package to get traces into Latitude.
-
-The PHP backend demonstrates how to integrate Latitude **without an official SDK**, using standard **OpenTelemetry** to generate spans and export them directly to Latitude's OTLP-compatible trace endpoint. This pattern works for any language with an OpenTelemetry implementation (telemetry mode only).
+**Telemetry mode** — Your app calls the LLM provider directly and sends trace data to Latitude for observability. Python and TypeScript use the official SDK's telemetry wrapper; PHP shows how to do this with standard OpenTelemetry, which works for **any language** with an OTel implementation.
 
 ## Project structure
 
