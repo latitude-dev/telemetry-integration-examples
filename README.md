@@ -6,25 +6,22 @@
 
 ## What is this?
 
-<<<<<<< HEAD
-A webapp that generates Wikipedia-style articles from a concept you type in, showcasing how to integrate [Latitude](https://latitude.so) into your app. The repo ships **two backend implementations** — one in **Python** (FastAPI) and one in **TypeScript** (Express) — sharing a single React frontend.
+A webapp that generates Wikipedia-style articles from a concept you type in, showcasing how to integrate [Latitude](https://latitude.so) into your app.
 
-# Both backends expose the same API, so you can pick whichever language you prefer. Each demonstrates two integration approaches:
+The repo shows how to do it with:
 
-A webapp that generates Wikipedia-style articles from a concept you type in, showcasing how to integrate [Latitude](https://latitude.so) into your app. The repo ships **three backend implementations** — **Python** (FastAPI), **TypeScript** (Express), and **PHP** (Slim) — sharing a single React frontend.
+- Python (backend/python using official SDK)
+- Typescript (backend/typescript using official SDK)
+- Other Languages (using example of PHP that doesnt have SDK)
 
-All backends expose the same API, so you can pick whichever language you prefer. The Python and TypeScript backends demonstrate two integration approaches:
+All backends expose the same API, so you can pick whichever language you prefer.
 
-> > > > > > > fd028ac (add PHP opentelemetry example)
+The Python and TypeScript backends demonstrate two integration approaches:
 
 1. **Using Latitude as the gateway:** Run your prompts through Latitude.
 2. **Using your own provider:** Use Latitude as a prompt versioning tool to pull your prompts from, and then wrap your provider calls with Latitude's telemetry package to get traces into Latitude.
 
-# <<<<<<< HEAD
-
 The PHP backend demonstrates how to integrate Latitude **without an official SDK**, using standard **OpenTelemetry** to generate spans and export them directly to Latitude's OTLP-compatible trace endpoint. This pattern works for any language with an OpenTelemetry implementation (telemetry mode only).
-
-> > > > > > > fd028ac (add PHP opentelemetry example)
 
 ## Project structure
 
@@ -32,12 +29,8 @@ The PHP backend demonstrates how to integrate Latitude **without an official SDK
 ├── frontend/               Shared React + Vite UI
 ├── backend/
 │   ├── python/             FastAPI backend (uvicorn)
-<<<<<<< HEAD
-│   └── typescript/         Express backend (tsx)
-=======
 │   ├── typescript/         Express backend (tsx)
 │   └── php/                Slim backend (PHP built-in server)
->>>>>>> fd028ac (add PHP opentelemetry example)
 ├── .env                    Shared environment variables
 └── package.json            Root workspace with dev scripts
 ```
@@ -66,13 +59,10 @@ pnpm install
 # Python backend
 cd backend/python
 uv sync --all-extras --all-groups
-<<<<<<< HEAD
-=======
 
 # PHP backend (requires PHP 8.1+ and Composer)
 cd backend/php
 composer install
->>>>>>> fd028ac (add PHP opentelemetry example)
 ```
 
 ### 3. Run the frontend
