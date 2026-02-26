@@ -447,7 +447,7 @@ wheels = [
 
 [[package]]
 name = "latitude-telemetry"
-version = "3.0.0"
+version = "2.0.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "openinference-instrumentation-dspy" },
@@ -480,9 +480,9 @@ dependencies = [
     { name = "pydantic" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4e/3d/6b05e3a8c951a7831bfd63c2c0e9e55530ab1ea4d8db24a379d2e796cd34/latitude_telemetry-3.0.0.tar.gz", hash = "sha256:5221e8cafb49c97b1551d34cf5c1a58ca3ad17eb79555bfcfa95bb991023f592", size = 162549, upload-time = "2026-02-17T09:57:50.822Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/87/bb/fb4d86f6fed04b52290197108d3a0fb2ab12da11969f01032351943a00c2/latitude_telemetry-2.0.4.tar.gz", hash = "sha256:ab01de77c98c0b76e4e023fa11601ba0fe65e47aeb511a845a2ca8acef010513", size = 162806, upload-time = "2026-02-26T16:16:25.406Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/92/f4/29a4c732a66bfd98a8378b17a18cdcdd1faf84e54b7c53aa2ce578bc45c0/latitude_telemetry-3.0.0-py3-none-any.whl", hash = "sha256:9349c49f12cefa7a3d6619e0df8ede4402fd866da0db9c40faa26a321d0f72ce", size = 26335, upload-time = "2026-02-17T09:57:49.441Z" },
+    { url = "https://files.pythonhosted.org/packages/e3/29/eea451b6802afa3581224ee80ac110c8c6aeb2b67884e32a68b03854f596/latitude_telemetry-2.0.4-py3-none-any.whl", hash = "sha256:daed779956e16a31862c559cfdac63181cb84170a38b0e0ac0c4ad8df7b36395", size = 26950, upload-time = "2026-02-26T16:16:24.273Z" },
 ]
 
 [[package]]
@@ -1149,7 +1149,7 @@ dependencies = [
 requires-dist = [
     { name = "fastapi", specifier = "==0.128.0" },
     { name = "latitude-sdk", specifier = "==5.6.0" },
-    { name = "latitude-telemetry", specifier = "==3.0.0" },
+    { name = "latitude-telemetry", specifier = "==2.0.4" },
     { name = "openai", specifier = "==2.16.0" },
     { name = "promptl-ai", specifier = "==1.3.0" },
     { name = "python-dotenv", specifier = "==1.2.1" },
