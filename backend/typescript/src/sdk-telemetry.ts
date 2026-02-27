@@ -32,5 +32,6 @@ export async function generateWikipediaArticleStream(
     model,
     messages,
     stream: true,
+    stream_options: { include_usage: true },
   });
 }

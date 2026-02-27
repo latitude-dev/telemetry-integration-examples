@@ -44,8 +44,13 @@ async def generate_wikipedia_article_stream(input: str) -> AsyncIterator[str]:
         model=rendered_prompt.config["model"],
         messages=rendered_prompt.messages,
         stream=True,
+        stream_options={"include_usage": True},
     )
+
     for chunk in stream:
-        if chunk.choices[0].delta.content is not None:
-            content = chunk.choices[0].delta.content
+        if not chunk.choices:
+            continue
+        first_choice = chunk.choices[0]
+        if first_choice.delta and first_choice.delta.content is not None:
+            content = first_choice.delta.content
             yield content
