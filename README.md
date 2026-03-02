@@ -10,17 +10,17 @@ A webapp that generates Wikipedia-style articles from a concept you type in, sho
 
 The repo ships three backend implementations that all expose the same API, so you can pick whichever language you prefer:
 
-| Backend | Language | Latitude SDK | Gateway mode | Telemetry mode | Log API mode | How observability is sent |
-|---------|----------|:------------:|:------------:|:--------------:|:------------:|--------------------------|
-| `backend/python` | Python | Official | Yes | Yes | No | SDK telemetry wrapper |
-| `backend/typescript` | TypeScript | Official | Yes | Yes | No | SDK telemetry wrapper |
-| `backend/php` | PHP | None | No | Yes | Yes | Raw OpenTelemetry (OTLP) / Latitude Log API |
+| Backend              | Language   | Latitude SDK | Gateway mode | Telemetry mode | How telemetry is sent                       |
+| -------------------- | ---------- | :----------: | :----------: | :------------: | ------------------------------------------- |
+| `backend/python`     | Python     |   Official   |     Yes      |      Yes       | SDK telemetry wrapper                       |
+| `backend/typescript` | TypeScript |   Official   |     Yes      |      Yes       | SDK telemetry wrapper                       |
+| `backend/php`        | PHP        |     None     |      No      |      Yes       | Raw OpenTelemetry (OTLP) / Latitude Log API |
 
 **Gateway mode** — Latitude acts as the LLM gateway: your app sends prompts to Latitude, which forwards them to the provider and returns the response.
 
-**Telemetry mode** — Your app calls the LLM provider directly and sends trace data to Latitude for observability. Python and TypeScript use the official SDK's telemetry wrapper; PHP shows how to do this with standard OpenTelemetry, which works for **any language** with an OTel implementation.
+**Telemetry mode** — Your app calls the LLM provider directly and sends trace data to Latitude for observability. Python and TypeScript use the official SDK's telemetry wrapper; Other languages such as PHP can do this by wrapping their calls in standard OpenTelemetry, which works for **any language** with an OTel implementation.
 
-**Log API mode** (PHP only) — Your app calls the LLM provider directly with a hardcoded prompt, then POSTs the full conversation (messages + response) to Latitude's Create Log Entry API. No OpenTelemetry needed — just a single HTTP call after the completion finishes. Toggle with `USE_LATITUDE_LOG_API=true`.
+**Create log with API mode (Useful for other languages that don't have an SDK)** — Send Latitude the full conversation to using the Create Log Entry API to get the trace within Latitude. No OpenTelemetry needed. Toggle with `USE_LATITUDE_LOG_API=true`.
 
 ## Project structure
 
@@ -39,6 +39,8 @@ The repo ships three backend implementations that all expose the same API, so yo
 ### 1. Environment variables
 
 Create a `.env` file at the **repo root** with:
+
+---
 
 ```bash
 LATITUDE_API_KEY=your-latitude-api-key
