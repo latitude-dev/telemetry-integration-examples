@@ -227,3 +227,8 @@ backend/php/composer.lock
 
 # pnpm store
 .pnpm-store/
+
+
+# Ruby backend
+backend/ruby/vendor/
+backend/ruby/Gemfile.lock
