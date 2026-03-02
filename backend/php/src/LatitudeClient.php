@@ -36,4 +36,35 @@ class LatitudeClient
         $response = $this->http->get($url);
         return json_decode($response->getBody()->getContents(), true);
     }
+
+    /**
+     * Create a log entry for a prompt without executing it through Latitude.
+     *
+     * @param array  $messages  Conversation messages in PromptL format
+     * @param string $response  The final assistant response text
+     * @return array
+     */
+    public function createLog(
+        int $projectId,
+        string $versionUuid,
+        string $path,
+        array $messages,
+        string $response,
+    ): array {
+        $url = sprintf(
+            '/api/v3/projects/%d/versions/%s/documents/logs',
+            $projectId,
+            $versionUuid,
+        );
+
+        $resp = $this->http->post($url, [
+            'json' => [
+                'path' => $path,
+                'messages' => $messages,
+                'response' => $response,
+            ],
+        ]);
+
+        return json_decode($resp->getBody()->getContents(), true);
+    }
 }
