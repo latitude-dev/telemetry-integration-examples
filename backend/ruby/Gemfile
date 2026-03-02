@@ -1,0 +1,12 @@
+source 'https://rubygems.org'
+
+ruby '>= 3.0'
+
+gem 'sinatra'
+gem 'rackup'
+gem 'puma'
+gem 'ruby-openai'
+gem 'faraday'
+gem 'opentelemetry-sdk'
+gem 'opentelemetry-exporter-otlp'
+gem 'dotenv'
