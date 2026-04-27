@@ -44,15 +44,9 @@ Create a `.env` file at the **repo root** with:
 
 ---
 
-```bash
+````bash
 LATITUDE_API_KEY=your-latitude-api-key
-LATITUDE_PROJECT_ID=your-project-id
-LATITUDE_PROMPT_PATH=wikipedia-article-generator
-LATITUDE_PROMPT_VERSION_UUID=live
-OPENAI_API_KEY=your-openai-api-key
-USE_LATITUDE_GATEWAY=false        # Python/TypeScript: use gateway mode instead of telemetry
-USE_LATITUDE_LOG_API=false         # PHP/Ruby: use Log API mode instead of telemetry
-```
+LATITUDE_PROJECT_SLUG=your-project-slug   # TypeScript backend (v2 telemetry)```
 
 ### 2. Install dependencies
 
@@ -71,7 +65,7 @@ composer install
 # Ruby backend (requires Ruby 3.0+ and Bundler)
 cd backend/ruby
 bundle install
-```
+````
 
 ### 3. Run the frontend
 

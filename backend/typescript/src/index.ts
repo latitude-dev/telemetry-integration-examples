@@ -1,9 +1,19 @@
 import "./env.js";
+import crypto from "node:crypto";
 import express from "express";
-import { generateWikipediaArticleStream } from "./sdk-gateway.js";
-import { generateWikipediaArticleStream as generateWikipediaArticleStreamTelemetry } from "./sdk-telemetry.js";
-import { LatitudeTelemetry, Instrumentation } from "@latitude-data/telemetry";
-import OpenAI from "openai";
+import { generateWikipediaArticleStream } from "./sdk-telemetry.js";
+import { initLatitude, capture } from "@latitude-data/telemetry";
+
+const SYSTEM_PROMPT =
+  "You are an expert writer, and I need your help writing wikipedia articles.";
+const MODEL = "gpt-4.1";
+
+const latitude = initLatitude({
+  apiKey: process.env.LATITUDE_API_KEY!,
+  projectSlug: process.env.LATITUDE_PROJECT_SLUG!,
+  disableBatch: true,
+  instrumentations: ["openai"],
+});
 
 const app = express();
 app.use(express.json());
@@ -36,47 +46,14 @@ app.post("/generate-wikipedia-article", async (req, res) => {
     return;
   }
 
-  const useGateway = process.env.USE_LATITUDE_GATEWAY === "true";
-
-  if (useGateway) {
-    const stream = generateWikipediaArticleStream(input);
-    res.setHeader("Content-Type", "text/event-stream");
-    res.setHeader("Cache-Control", "no-cache");
-    res.setHeader("Connection", "keep-alive");
-    res.setHeader("X-Accel-Buffering", "no");
-
-    stream.on("data", (chunk: Buffer | string) => {
-      const text = typeof chunk === "string" ? chunk : chunk.toString("utf8");
-      const lines = text.split("\n");
-      const ssePayload =
-        lines.map((line) => `data: ${line}`).join("\n") + "\n\n";
-      res.write(ssePayload);
-    });
-    stream.on("end", () => res.end());
-    stream.on("error", (err) => {
-      if (!res.writableEnded) res.status(500).end(String(err?.message ?? err));
-    });
-    return;
-  }
-
-  const promptPath = process.env.LATITUDE_PROMPT_PATH!;
-
-  const telemetry = new LatitudeTelemetry(process.env.LATITUDE_API_KEY!, {
-    instrumentations: {
-      [Instrumentation.OpenAI]: OpenAI,
-    },
-  });
+  await latitude.ready;
 
   try {
-    await telemetry.capture(
-      {
-        projectId: Number(process.env.LATITUDE_PROJECT_ID),
-        path: promptPath,
-      },
+    await capture(
+      "feature-generate-wikipedia-article",
       async () => {
-        const stream = await generateWikipediaArticleStreamTelemetry(input);
+        const stream = await generateWikipediaArticleStream(input);
         res.setHeader("Content-Type", "text/plain; charset=utf-8");
-
         for await (const chunk of stream) {
           const content = chunk.choices[0]?.delta?.content;
           if (content) {
@@ -84,6 +61,13 @@ app.post("/generate-wikipedia-article", async (req, res) => {
           }
         }
         res.end();
+      },
+      {
+        sessionId: crypto.randomUUID(),
+        metadata: {
+          environment: "development",
+        },
+        tags: ["feature-generate-wikipedia-article"],
       },
     );
   } catch (err) {
@@ -102,4 +86,9 @@ app.post("/generate-wikipedia-article", async (req, res) => {
 const PORT = Number(process.env.PORT) || 8000;
 app.listen(PORT, () => {
   console.log(`API running at http://localhost:${PORT}`);
+});
+
+process.on("SIGTERM", async () => {
+  await latitude.shutdown();
+  process.exit(0);
 });

@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ function parseSSEEvent(eventBlock: string): string {
 }
 
 function App() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [view, setView] = useState<View>("input");
   const [concept, setConcept] = useState("");
   const [articleContent, setArticleContent] = useState("");
@@ -43,7 +44,9 @@ function App() {
       const reader = res.body?.getReader();
       if (!reader) throw new Error("No response body");
       const decoder = new TextDecoder();
-      const isSSE = res.headers.get("content-type")?.includes("text/event-stream");
+      const isSSE = res.headers
+        .get("content-type")
+        ?.includes("text/event-stream");
       let buffer = "";
       while (true) {
         const { value, done } = await reader.read();
@@ -97,13 +100,21 @@ function App() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
               <Input
                 placeholder="Enter a concept (e.g. Quantum computing)"
                 value={concept}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setConcept(e.target.value)
                 }
+                onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                  if (e.key === "Enter" && e.metaKey) {
+                    e.preventDefault();
+                    if (!isStreaming && concept.trim()) {
+                      formRef.current?.requestSubmit();
+                    }
+                  }
+                }}
                 disabled={isStreaming}
                 autoFocus
                 className="text-base"
@@ -114,7 +125,7 @@ function App() {
                 className="w-full"
                 size="lg"
               >
-                Generate article
+                Generate article (cmd + enter)
               </Button>
             </form>
           </CardContent>
