@@ -66,6 +66,9 @@ app.post("/generate-wikipedia-article", async (req, res) => {
         sessionId: crypto.randomUUID(),
         metadata: {
           environment: "development",
+          input_variable: input,
+          model: MODEL,
+          system_prompt: SYSTEM_PROMPT,
         },
         tags: ["feature-generate-wikipedia-article"],
       },
